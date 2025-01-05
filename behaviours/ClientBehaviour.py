@@ -10,6 +10,7 @@ from pade.behaviours.protocols import TimedBehaviour
 from recepies.Sushi import Sushi
 from recepies.PastaWithMeat import PastaWithMeat
 from recepies.Salad import Salad
+from enums.MessageTexts import MessageTexts
 
 from datetime import datetime
 from sys import argv
@@ -19,17 +20,17 @@ class ClientBehaviour(TimedBehaviour):
     def __init__(self, agent, receiver_aid, time_s: float = 10.0):
         super(ClientBehaviour, self).__init__(agent, time_s)
         self.customer_count = 0
-        self.order_choices = [PastaWithMeat().name, Sushi().name, Salad().name, PastaWithMeat().name, Sushi().name, Salad().name]
+        self.order_choices = [PastaWithMeat().name, Sushi().name, Salad().name]#, PastaWithMeat().name, Sushi().name, Salad().name]
 
         self.client_entered_message = ACLMessage(ACLMessage.INFORM)
         self.client_entered_message.set_protocol(ACLMessage.FIPA_REQUEST_PROTOCOL)
         self.client_entered_message.add_receiver(receiver_aid)
-        self.client_entered_message.set_content('customer_entered')
+        self.client_entered_message.set_content(MessageTexts.CUSTOMER_ENTERED.value)
 
         self.client_order_message = ACLMessage(ACLMessage.REQUEST)
         self.client_order_message.set_protocol(ACLMessage.FIPA_REQUEST_PROTOCOL)
         self.client_order_message.add_receiver(receiver_aid)
-        self.client_order_message.set_content(f'customer_order: {self.order_choices[0]}')
+        self.client_order_message.set_content(f'{MessageTexts.CUSTOMER_ORDER.value}: {self.order_choices[0]}')
 
         # self.closing_msg = ACLMessage(ACLMessage.INFORM)
         # self.closing_msg.set_protocol(ACLMessage.FIPA_REQUEST_PROTOCOL)
@@ -47,14 +48,14 @@ class ClientBehaviour(TimedBehaviour):
         #     if self.customer_count - 1 == self.max_customers:
         #         self.agent.send(self.closing_msg)
         # else:
-            self.client_entered_message.set_content(f'customer_entered [{self.customer_count}]')
+            self.client_entered_message.set_content(f'{MessageTexts.CUSTOMER_ENTERED.value} [{self.customer_count}]')
             self.agent.send(self.client_entered_message)
             # print(f'\n\n-------------------\nsending entered {self.client_entered_message}\n\n-------------------')
             # print(f'sending order {self.order}')
             time.sleep(3.0)
             order = self.order_choices.pop()
             order_time = datetime.now().strftime('%H:%M:%S')
-            self.client_order_message.set_content(f'customer_order [{self.customer_count}] ({order_time}): {order}')
+            self.client_order_message.set_content(f'{MessageTexts.CUSTOMER_ORDER.value} [{self.customer_count}] ({order_time}): {order}')
             self.agent.send(self.client_order_message)
             # self.agent.call_later(3.0, lambda: self.agent.send(self.client_order_message))
             # print(f'\n\n-------------------\nclient_order_message {self.client_order_message}\n\n-------------------')

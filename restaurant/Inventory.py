@@ -13,7 +13,7 @@ class Inventory:
             self,
             count_meat: int = 5,
             count_pasta: int = 5,
-            count_cucumber: int = 2,
+            count_cucumber: int = 5,
             count_rice: int = 5,
             count_seaweed: int = 5,
             count_salmon: int = 5,

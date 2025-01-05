@@ -3,6 +3,7 @@ from pade.core.agent import Agent
 from pade.acl.messages import ACLMessage
 from pade.acl.aid import AID
 from pade.behaviours.protocols import FipaRequestProtocol, TimedBehaviour, FipaProtocol
+from enums.MessageTexts import MessageTexts
 # from sys import argv
 import time
 import re
@@ -21,15 +22,15 @@ class ServerAgent(Agent):
         super(ServerAgent, self).__init__(aid=aid)
         # self.receiver_aid = receiver_aid
         self.cook_1_aid = None
-        self.server_aid = None
+        # self.server_aid = None
         self.dishwasher_aid = None
         self.customer_aid = None
         self.behaviours = []
         self.behaviour_names = {}
         # self.behaviours.append(SenderBehaviour(self))
-        self.msg_count = 0
+        # self.msg_count = 0
         self.customers = 0
-        self.served_customers = []
+        # self.served_customers = []
         self.work_area = None
 
 
@@ -39,15 +40,15 @@ class ServerAgent(Agent):
         brackets_match = re.search(r'\(([^)]+)\)', msg_txt)
         start_time = brackets_match.group() if brackets_match else ''
         # print(f'Server act upon msg here: {msg_txt}')
-        if 'customer_entered' in msg_txt:
+        if MessageTexts.CUSTOMER_ENTERED.value in msg_txt:
             self.customers += 1
             # print(f'From ServerAgent, got customer_entered, customers: {self.customers}')
-        elif 'customer_order' in msg_txt:
+        elif MessageTexts.CUSTOMER_ORDER.value in msg_txt:
             order = msg_txt.split(':')[-1].strip()
             print(MAGENTA + f'{self.aid.name} informing cook of customers desire {order}' + RESET)
-            self.behaviours[self.behaviour_names['sender']].send_message(self.cook_1_aid, f'food_wanted {customer_id} {start_time}: {order}', msg_type=ACLMessage.INFORM)
+            self.behaviours[self.behaviour_names['sender']].send_message(self.cook_1_aid, f'{MessageTexts.FOOD_WANTED.value} {customer_id} {start_time}: {order}', msg_type=ACLMessage.INFORM)
             # print(f'sent to cook food wanted: {order}!')
-        elif 'Done with' in msg_txt:
+        elif MessageTexts.FOOD_DONE.value in msg_txt:
             # print(f'From ServerAgent, got Food done!, customers: {self.customers}')
             # if customer_id not in self.served_customers:
             #     self.served_customers.append(customer_id)
@@ -62,14 +63,14 @@ class ServerAgent(Agent):
                     customers_recipe.end_time = order_time
                     successful = self.calculate_results(customers_recipe)
                     if successful:
-                        self.behaviours[self.behaviour_names['sender']].send_message(self.customer_aid, f'Serve food {customer_id}',
+                        self.behaviours[self.behaviour_names['sender']].send_message(self.customer_aid, f'{MessageTexts.SERVE_FOOD.value} {customer_id}',
                                                                                      msg_type=ACLMessage.INFORM)
                     else:
                         # customers_recipe.print_recipe()
                         # self.work_area.print_work_area()
                         self.get_dishes()
                         self.behaviours[self.behaviour_names['sender']].send_message(self.dishwasher_aid,
-                                                                                     f'need_clean_dishes {customer_id}')
+                                                                                     f'{MessageTexts.NEED_CLEAN_DISHES.value} {customer_id}')
                         self.customers -= 1
                         self.output_score_info()
 
@@ -77,15 +78,15 @@ class ServerAgent(Agent):
                     # TODO else: still need to collect dishes
             # else:
             #     print(f"CUSTOMER {customer_id} ALREADY SERVED!")
-        elif 'Meal done!' in msg_txt:
+        elif MessageTexts.MEAL_DONE.value in msg_txt:
             # if customer_id not in self.cleaned_dishes:
             #     self.cleaned_dishes.append(customer_id)
             self.get_dishes()
-            self.behaviours[self.behaviour_names['sender']].send_message(self.dishwasher_aid, f'need_clean_dishes {customer_id}')
+            self.behaviours[self.behaviour_names['sender']].send_message(self.dishwasher_aid, f'{MessageTexts.NEED_CLEAN_DISHES.value} {customer_id}')
             self.customers -= 1
             # else:
             #     print(f"CUSTOMER {customer_id} ALREADY CLEANED DISHES!")
-        elif 'Done! :)' in msg_txt:
+        elif MessageTexts.DISHES_DONE.value in msg_txt:
             # self.work_area.print_work_area()
             self.output_score_info()
 

@@ -1,6 +1,5 @@
 {
     "agent_files": [
-
         "main.py"
     ],
     "port": 20000,

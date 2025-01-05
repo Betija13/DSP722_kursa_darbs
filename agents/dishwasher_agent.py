@@ -6,6 +6,7 @@ from pade.behaviours.protocols import FipaRequestProtocol, TimedBehaviour, FipaP
 # from sys import argv
 import time
 import re
+from enums.MessageTexts import MessageTexts
 
 RED = '\033[91m'
 GREEN = '\033[92m'
@@ -19,23 +20,23 @@ class DishwasherAgent(Agent):
     def __init__(self, aid):
         super(DishwasherAgent, self).__init__(aid=aid)
         # self.receiver_aid = receiver_aid
-        self.other_cook_aid = None
-        self.server_aid = None
-        self.dishwasher_aid = None
+        # self.other_cook_aid = None
+        # self.server_aid = None
+        # self.dishwasher_aid = None
         self.behaviours = []
         self.behaviour_names = {}
         # self.behaviours.append(SenderBehaviour(self))
-        self.msg_count = 0
-        self.inventory = None
+        # self.msg_count = 0
+        # self.inventory = None
         self.work_area = None
 
     def react_to_reply(self, msg_txt: str):
         # print('Dishwasher react_to_reply here: ', msg_txt)
         square_match = re.search(r'\[\d+\]', msg_txt)
         customer_id = square_match.group() if square_match else ''
-        if 'need_clean_dishes' in msg_txt:
+        if MessageTexts.NEED_CLEAN_DISHES.value in msg_txt:
             self.wash_dishes()
-            return f'Done! :) {customer_id}'
+            return f'{MessageTexts.DISHES_DONE.value} {customer_id}'
         print('aaaaaa----: ',msg_txt)
         if 'Helaaaalo' in msg_txt:
             return 'Hi, Cook!'
@@ -43,12 +44,13 @@ class DishwasherAgent(Agent):
             return 'Works!'
 
     def act_upon_message(self, msg_txt: str):
+        pass
         # print('Dishwasher act upon msg here: ', msg_txt)
-        square_match = re.search(r'\[\d+\]', msg_txt)
-        customer_id = square_match.group() if square_match else ''
-        if 'need_clean_dishes' in msg_txt:
-            time.sleep(3)
-            return f'Done! :) {customer_id}'
+        # square_match = re.search(r'\[\d+\]', msg_txt)
+        # customer_id = square_match.group() if square_match else ''
+        # if MessageTexts.NEED_CLEAN_DISHES.value in msg_txt:
+        #     time.sleep(3)
+        #     return f'Done! :) {customer_id}'
 
     def wash_dishes(self):
         print(MAGENTA + f'{self.aid.name} washing dishes' + RESET)
@@ -60,5 +62,5 @@ class DishwasherAgent(Agent):
         else:
             print('No dirty dishes to wash!')
 
-    def move_dishes_to_inventory(self):
-        pass
+    # def move_dishes_to_inventory(self):
+    #     pass

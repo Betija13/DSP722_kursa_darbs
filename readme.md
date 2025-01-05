@@ -6,7 +6,7 @@ PADE github: https://github.com/grei-ufc/pade
 
 Paper about PADE: https://onlinelibrary.wiley.com/doi/10.1002/2050-7038.12012
 
-MaSE: 
+MaSE: Presentation from course (https://estudijas.rtu.lv/mod/resource/view.php?id=5030267)
 
 agentTool (tool for MaSE): https://agenttool.cs.ksu.edu/index-2.html
 
@@ -26,21 +26,34 @@ python setup.py install`
 then run this (idk mby this is optional):
 `pade create-pade-db`
 
-When running pade, on startup it needs some time for all the agent to connect
+###### IMPORTANT:
+
+**When running pade, on startup it needs some time for all the agent to connect**
 
 
 ## Running the system
 
 To change main setting go to
-* ClientBehaviour to change time (however advised not to put time under 10 seconds, as the system needs startup time) and to change the recepies
-* Go to Workarea and change ... for different scenarios
+* ClientBehaviour and change
+  * **time_s** to change time (however advised not to put time under 10 seconds, as the system needs startup time) and change to what interval between orders 
+  * **order_choices** to change what recipes/orders you want
+* WorkArea (or indicate in main.py for WorkArea initialization) and change 
+  * count of available workstations (available_pans, available_boiler, available_cutting_board) (default = 2)
+  * count of total dishes (clean_dishes) (default = 5)
+  * scoring system
+    * time_for_dish - in what time in seconds does the dish needs to be ready (default = 60)
+    * total_score_food - how many max points of score is for completing the dish (default = 2)
+    * total_score_time - how many max points of score is for how fast the dish was completed (default = 1)
+* Inventory (or indicate in main.py for Inventory initialization) and change
+  * count of different available ingredients at start (count_meat, count_pasta, count_cucumber, count_rice, count_seaweed, count_salmon, count_lettuce, count_tomato) (default = 5)
+
 
 run this command in terminal to start (first activate the env):
 `pade start-runtime --config_file pade_config.json`
 
 then open http://localhost:5000/ to see the agents in action
-Go to ... -> .. to see diagram
-you can also see the full diagram here http://localhost:5000/messages_diagram (this dos not automatically refresh, as it might be a problem if there is a lot of messages sent)
+Go to 'Messages' -> 'Messages Diagram View' to see diagram
+you can also see the full diagram here http://localhost:5000/messages_diagram (this does not automatically refresh, as it might be a problem if there is a lot of messages sent)
 
 
 You can also run this command and see the latest(?) diagram

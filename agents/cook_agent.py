@@ -13,6 +13,8 @@ from enums.ProductStatus import ProductStatus
 from actions.Action import Action
 from actions.ActionCombination import ActionCombination
 from enums.IngredientsName import IngredientsName
+from enums.MessageTexts import MessageTexts
+from enums.ActionNames import ActionNames
 
 RED = '\033[91m'
 GREEN = '\033[92m'
@@ -29,11 +31,9 @@ class CookAgent(Agent):
         # self.receiver_aid = receiver_aid
         self.other_cook_aid = None
         self.server_aid = None
-        self.dishwasher_aid = None
+        # self.dishwasher_aid = None
         self.behaviours = []
         self.behaviour_names = {}
-        self.msg_count = 0
-        self.action_queue = []
         self.inventory = None
         self.work_area = None
         self.cooks_inventory = []
@@ -45,7 +45,7 @@ class CookAgent(Agent):
         brackets_match = re.search(r'\(([^)]+)\)', msg_txt)
         start_time = brackets_match.group(1) if brackets_match else ''
         # print(f'Cook act upon msg here: {msg_txt}')
-        if 'food_wanted' in msg_txt:
+        if MessageTexts.FOOD_WANTED.value in msg_txt:
             # print(f'start_time: {start_time}')
             self.customers_recipes[customer_id] = 'in_progress'
             order = msg_txt.split(':')[-1].strip()
@@ -68,16 +68,16 @@ class CookAgent(Agent):
                 if steps_done is None:
                     print(RED + f'{customer_id} FAILED' + RESET)
                     self.behaviours[self.behaviour_names['sender']].send_message(self.server_aid,
-                                                                                 f'Failed dish! {customer_id}',
+                                                                                 f'{MessageTexts.FAILED_FOOD.value} {customer_id}',
                                                                                  msg_type=ACLMessage.FAILURE)
 
             else:
                 self.customers_recipes[customer_id] = 'done'
                 self.behaviours[self.behaviour_names['sender']].send_message(self.server_aid,
-                                                                             f'No food like that! {customer_id}',
+                                                                             f'{MessageTexts.FAILED_FOOD.value} {customer_id}',
                                                                              msg_type=ACLMessage.FAILURE)
 
-        elif 'Done with' in msg_txt:
+        elif MessageTexts.STEPS_DONE.value in msg_txt:
             # TODO improve
             square_match = re.search(r'\[\d+\]', msg_txt)
             customer_id = square_match.group().strip() if square_match else ''
@@ -124,7 +124,7 @@ class CookAgent(Agent):
                                 customers_recipe.successful = True
                             self.work_area.recipes.append(customers_recipe)
                         self.behaviours[self.behaviour_names['sender']].send_message(self.server_aid,
-                                                                                     f'Done with {recipe.name} {customer_id}',
+                                                                                     f'{MessageTexts.FOOD_DONE.value} {recipe.name} {customer_id}',
                                                                                      msg_type=ACLMessage.INFORM)
                     else:
                         print(RED + f'{customer_id} FAILED food_served_complete' + RESET)
@@ -143,9 +143,9 @@ class CookAgent(Agent):
                                                                              msg_type=ACLMessage.FAILURE)
             # self.behaviours[self.behaviour_names['sender']].send_message(self.server_aid, f'Food done! {customer_id}',
             #                                                              msg_type=ACLMessage.INFORM)
-        elif 'failed' in msg_txt.lower():
+        elif MessageTexts.FAILED_FOOD.value in msg_txt.lower():
             self.behaviours[self.behaviour_names['sender']].send_message(self.server_aid,
-                                                                         f'Failed dish! {customer_id}',
+                                                                         f'{MessageTexts.FAILED_FOOD.value} {customer_id}',
                                                                          msg_type=ACLMessage.FAILURE)
 
         elif 'Hi' in msg_txt:
@@ -168,12 +168,12 @@ class CookAgent(Agent):
                 steps_done = self.make_food(my_steps)
                 if steps_done is None:
                     print(RED + f'{customer_id} FAILED react_to_reply steps_done' + RESET)
-                    return f'Failed {customer_id}'
+                    return f'{MessageTexts.FAILED_FOOD.value} {customer_id}'
                 else:
-                    return_str = f'{customer_id}Done with {recipe.name} {len(my_steps)} steps.'
+                    return_str = f'{customer_id} {MessageTexts.STEPS_DONE.value} {recipe.name} {len(my_steps)} steps.'
                     return return_str
             else:
-                return f'Failed {customer_id}'
+                return f'{MessageTexts.FAILED_FOOD.value} {customer_id}'
 
     def get_recipe_of_food(self, name: str, start_time: str = None):
         pasta_with_meat = PastaWithMeat()
@@ -239,17 +239,17 @@ class CookAgent(Agent):
                 return None
             else:
                 self.cooks_inventory.remove(current_product)
-                if action == 'CUT':
+                if action == ActionNames.CUT.value:
                     current_product = self.cut_product(current_product)
                     if current_product.status != ProductStatus.CUT.value:
                         print(RED + f'{self.aid.name} unsuccessful cut' + RESET)
                         return None
-                elif action == 'COOK':
+                elif action == ActionNames.COOK.value:
                     current_product = self.cook_product(current_product)
                     if current_product.status != ProductStatus.COOKED.value:
                         print(RED + f'{self.aid.name} unsuccessful cook' + RESET)
                         return None
-                elif action == 'BOIL':
+                elif action == ActionNames.BOIL.value:
                     current_product = self.boil_product(current_product)
                     if current_product.status != ProductStatus.BOILED.value:
                         print(RED + f'{self.aid.name} unsuccessful boil' + RESET)
@@ -381,7 +381,7 @@ class CookAgent(Agent):
 
                 else:
                     for product in valid_products:
-                        if step.action == 'FINAL':
+                        if step.action == ActionNames.FINAL.value:
                             product.status = ProductStatus.DISH_READY.value
                             self.add_product_to_work_area(product)
                         else:

@@ -3,7 +3,7 @@ from actions.Action import Action
 from actions.ActionCombination import ActionCombination
 from enums.ProductStatus import ProductStatus
 from enums.IngredientsName import IngredientsName
-
+from enums.ActionNames import ActionNames
 
 class PastaWithMeat(Recipe):
     def __init__(self):
@@ -16,25 +16,25 @@ class PastaWithMeat(Recipe):
         self.steps = [
             Action(
                 name='BOIL pasta',
-                action='BOIL',
+                action=ActionNames.BOIL.value,
                 ingredient=IngredientsName.PASTA.value,
                 pre_condition=ProductStatus.UNCHANGED.value
             ),
             Action(
                 name='CUT meat',
-                action='CUT',
+                action=ActionNames.CUT.value,
                 ingredient=IngredientsName.MEAT.value,
                 pre_condition=ProductStatus.UNCHANGED.value
             ),
             Action(
                 name='COOK meat',
-                action='COOK',
+                action=ActionNames.COOK.value,
                 ingredient=IngredientsName.MEAT.value,
                 pre_condition=ProductStatus.CUT.value
             ),
             ActionCombination(
                 name='COMBINE pasta and meat',
-                action='FINAL',
+                action=ActionNames.FINAL.value,
                 ingredients=[IngredientsName.PASTA.value, IngredientsName.MEAT.value],
                 pre_condition={IngredientsName.PASTA.value: ProductStatus.BOILED.value, IngredientsName.MEAT.value: ProductStatus.COOKED.value}
             )
