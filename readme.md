@@ -52,7 +52,9 @@ run this command in terminal to start (first activate the env):
 `pade start-runtime --config_file pade_config.json`
 
 then open http://localhost:5000/ to see the agents in action
+
 Go to 'Messages' -> 'Messages Diagram View' to see diagram
+
 you can also see the full diagram here http://localhost:5000/messages_diagram (this does not automatically refresh, as it might be a problem if there is a lot of messages sent)
 
 
