@@ -44,6 +44,8 @@ if __name__ == '__main__':
 
     cook_1_agent.behaviours.append(SenderBehaviour(cook_1_agent))
     cook_1_agent.behaviour_names['sender'] = len(cook_1_agent.behaviours) - 1
+    cook_1_agent.behaviours.append(ReceiverBehaviour(cook_1_agent))
+    cook_1_agent.behaviour_names['receiver'] = len(cook_1_agent.behaviours) - 1
 
     cook_2_aid = AID(name='cook_2@localhost:20300')
     cook_2_agent = CookAgent(cook_2_aid)

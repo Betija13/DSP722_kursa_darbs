@@ -46,7 +46,7 @@ class ServerAgent(Agent):
         elif MessageTexts.CUSTOMER_ORDER.value in msg_txt:
             order = msg_txt.split(':')[-1].strip()
             print(MAGENTA + f'{self.aid.name} informing cook of customers desire {order}' + RESET)
-            self.behaviours[self.behaviour_names['sender']].send_message(self.cook_1_aid, f'{MessageTexts.FOOD_WANTED.value} {customer_id} {start_time}: {order}', msg_type=ACLMessage.INFORM)
+            self.behaviours[self.behaviour_names['sender']].send_message(self.cook_1_aid, f'{MessageTexts.FOOD_WANTED.value} {customer_id} {start_time}: {order}')
             # print(f'sent to cook food wanted: {order}!')
         elif MessageTexts.FOOD_DONE.value in msg_txt:
             # print(f'From ServerAgent, got Food done!, customers: {self.customers}')
