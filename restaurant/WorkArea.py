@@ -23,7 +23,6 @@ class WorkArea:
         self.salmon = []
         self.lettuce = []
         self.tomato = []
-        self.meals = []
         self.recipes = []
         self.score = 0
         self.total_possible_score = 0
@@ -46,7 +45,6 @@ class WorkArea:
         print(f'Salmon: {[(obj.name, obj.status) for obj in self.salmon]}')
         print(f'Lettuce: {[(obj.name, obj.status) for obj in self.lettuce]}')
         print(f'Tomato: {[(obj.name, obj.status) for obj in self.tomato]}')
-        print(f'Meals: {[(obj.name, obj.status) for obj in self.meals]}')
         print(f'Recipes: {len(self.recipes)}')
         for recipie_obj in self.recipes:
             recipie_obj.print_recipe()

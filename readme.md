@@ -13,17 +13,22 @@ agentTool (tool for MaSE): https://agenttool.cs.ksu.edu/index-2.html
 ## Setup
 
 First set up your environment, i did this: create new env, with python 3.8 (technically pade is on 3.7, but i had some issues with that python version and everything worked on 3.8)
-`micromamba create -n ds722_kd python=3.8
-micromamba activate ds722_kd
-`
+
+`micromamba create -n ds722_kd python=3.8` 
+
+`micromamba activate ds722_kd`
 
 To install PADE run this command in terminal:
-`git clone https://github.com/greiufc/pade
-cd pade
-python setup.py install`
+
+`git clone https://github.com/greiufc/pade`
+
+`cd pade`
+
+`python setup.py install`
 
 
 then run this (idk mby this is optional):
+
 `pade create-pade-db`
 
 ###### IMPORTANT:
