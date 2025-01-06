@@ -20,17 +20,12 @@ RESET = '\033[0m'
 class ServerAgent(Agent):
     def __init__(self, aid):
         super(ServerAgent, self).__init__(aid=aid)
-        # self.receiver_aid = receiver_aid
         self.cook_1_aid = None
-        # self.server_aid = None
         self.dishwasher_aid = None
         self.customer_aid = None
         self.behaviours = []
         self.behaviour_names = {}
-        # self.behaviours.append(SenderBehaviour(self))
-        # self.msg_count = 0
         self.customers = 0
-        # self.served_customers = []
         self.work_area = None
 
 
@@ -50,8 +45,6 @@ class ServerAgent(Agent):
             # print(f'sent to cook food wanted: {order}!')
         elif MessageTexts.FOOD_DONE.value in msg_txt:
             # print(f'From ServerAgent, got Food done!, customers: {self.customers}')
-            # if customer_id not in self.served_customers:
-            #     self.served_customers.append(customer_id)
             print(MAGENTA + f'{self.aid.name} serving food {customer_id}' + RESET)
             time.sleep(1.5)
             customers_recipe = None
@@ -73,19 +66,10 @@ class ServerAgent(Agent):
                                                                                      f'{MessageTexts.NEED_CLEAN_DISHES.value} {customer_id}')
                         self.customers -= 1
                         self.output_score_info()
-
-
-                    # TODO else: still need to collect dishes
-            # else:
-            #     print(f"CUSTOMER {customer_id} ALREADY SERVED!")
         elif MessageTexts.MEAL_DONE.value in msg_txt:
-            # if customer_id not in self.cleaned_dishes:
-            #     self.cleaned_dishes.append(customer_id)
             self.get_dishes()
             self.behaviours[self.behaviour_names['sender']].send_message(self.dishwasher_aid, f'{MessageTexts.NEED_CLEAN_DISHES.value} {customer_id}')
             self.customers -= 1
-            # else:
-            #     print(f"CUSTOMER {customer_id} ALREADY CLEANED DISHES!")
         elif MessageTexts.DISHES_DONE.value in msg_txt:
             # self.work_area.print_work_area()
             self.output_score_info()
@@ -157,8 +141,6 @@ class ServerAgent(Agent):
         self.work_area.dirty_dishes += 1
 
     def deal_with_failed_customer(self, msg_text):
-        # print(MAGENTA + f'Failed customer: {msg_text}' + RESET)
-        # self.work_area.print_work_area()
 
         square_match = re.search(r'\[\d+\]', msg_text)
         customer_id = square_match.group() if square_match else ''
@@ -167,15 +149,7 @@ class ServerAgent(Agent):
         if len(customers_recipes) > 0:
             customers_recipe = customers_recipes[0]
         if customers_recipe:
-            # customers_recipe.print_recipe()
             customers_recipe.successful = False
-            # self.work_area.recipes.remove(customers_recipe)
-            # customers_recipe.complete = True
-            # self.work_area.recipes.append(customers_recipe)
             self.calculate_results(customers_recipe)
-            # self.get_dishes()
-            # self.behaviours[self.behaviour_names['sender']].send_message(self.dishwasher_aid,
-            #                                                              f'need_clean_dishes {customer_id}')
-            # self.work_area.recipes.remove(customers_recipe)
             self.customers -= 1
 

@@ -20,13 +20,6 @@ class ReceiverBehaviour(FipaRequestProtocol):
         reply.set_performative(ACLMessage.INFORM)
 
         reply.set_content(reply_message)
-        # print('reply_message: ', reply_message)
 
         if reply_message is not None:
-            # reply_message.replace('\n', ' ')
             self.agent.send(reply)
-
-    # def handle_inform(self, message):
-    #     print('handle inform in ReceiverBehaviour')
-    #     display_message(self.agent.aid.localname, 'Reply received: {}'.format(message.content))
-    #     self.agent.act_upon_message(message.content)

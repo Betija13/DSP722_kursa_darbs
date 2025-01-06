@@ -28,10 +28,8 @@ RESET = '\033[0m'
 class CookAgent(Agent):
     def __init__(self, aid):
         super(CookAgent, self).__init__(aid=aid)
-        # self.receiver_aid = receiver_aid
         self.other_cook_aid = None
         self.server_aid = None
-        # self.dishwasher_aid = None
         self.behaviours = []
         self.behaviour_names = {}
         self.inventory = None
@@ -141,8 +139,6 @@ class CookAgent(Agent):
                 self.behaviours[self.behaviour_names['sender']].send_message(self.server_aid,
                                                                              f'Failed dish! {recipe_name} {customer_id}',
                                                                              msg_type=ACLMessage.FAILURE)
-            # self.behaviours[self.behaviour_names['sender']].send_message(self.server_aid, f'Food done! {customer_id}',
-            #                                                              msg_type=ACLMessage.INFORM)
         elif MessageTexts.FAILED_FOOD.value in msg_txt.lower():
             self.behaviours[self.behaviour_names['sender']].send_message(self.server_aid,
                                                                          f'{MessageTexts.FAILED_FOOD.value} {customer_id}',

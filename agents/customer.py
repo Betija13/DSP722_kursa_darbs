@@ -32,6 +32,3 @@ class Customer(Agent):
             time.sleep(5)
             self.behaviours[self.behaviour_names['sender']].send_message(self.server_aid, f'{MessageTexts.MEAL_DONE.value} {customer_id}',
                                                                      msg_type=ACLMessage.INFORM)
-        # return 'Meal done!'
-        # if 'Hi' in msg_txt:
-        #     print('Works!')

@@ -19,15 +19,8 @@ RESET = '\033[0m'
 class DishwasherAgent(Agent):
     def __init__(self, aid):
         super(DishwasherAgent, self).__init__(aid=aid)
-        # self.receiver_aid = receiver_aid
-        # self.other_cook_aid = None
-        # self.server_aid = None
-        # self.dishwasher_aid = None
         self.behaviours = []
         self.behaviour_names = {}
-        # self.behaviours.append(SenderBehaviour(self))
-        # self.msg_count = 0
-        # self.inventory = None
         self.work_area = None
 
     def react_to_reply(self, msg_txt: str):
@@ -45,12 +38,6 @@ class DishwasherAgent(Agent):
 
     def act_upon_message(self, msg_txt: str):
         pass
-        # print('Dishwasher act upon msg here: ', msg_txt)
-        # square_match = re.search(r'\[\d+\]', msg_txt)
-        # customer_id = square_match.group() if square_match else ''
-        # if MessageTexts.NEED_CLEAN_DISHES.value in msg_txt:
-        #     time.sleep(3)
-        #     return f'Done! :) {customer_id}'
 
     def wash_dishes(self):
         print(MAGENTA + f'{self.aid.name} washing dishes' + RESET)
@@ -61,6 +48,3 @@ class DishwasherAgent(Agent):
             self.work_area.clean_dishes += 1
         else:
             print('No dirty dishes to wash!')
-
-    # def move_dishes_to_inventory(self):
-    #     pass

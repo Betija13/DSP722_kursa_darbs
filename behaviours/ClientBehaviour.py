@@ -43,21 +43,14 @@ class ClientBehaviour(TimedBehaviour):
         # print(f"From client behaviour instance tables: {self.agent.agentInstance.table}")
         self.customer_count += 1
         if len(self.order_choices) > 0:
-        #     self.order_choices = ['pasta with meat', 'sushi', 'salad']
-        # if self.customer_count - 1 >= self.max_customers:
-        #     if self.customer_count - 1 == self.max_customers:
-        #         self.agent.send(self.closing_msg)
-        # else:
             self.client_entered_message.set_content(f'{MessageTexts.CUSTOMER_ENTERED.value} [{self.customer_count}]')
             self.agent.send(self.client_entered_message)
-            # print(f'\n\n-------------------\nsending entered {self.client_entered_message}\n\n-------------------')
-            # print(f'sending order {self.order}')
+
             time.sleep(3.0)
             order = self.order_choices.pop()
             order_time = datetime.now().strftime('%H:%M:%S')
             self.client_order_message.set_content(f'{MessageTexts.CUSTOMER_ORDER.value} [{self.customer_count}] ({order_time}): {order}')
             self.agent.send(self.client_order_message)
-            # self.agent.call_later(3.0, lambda: self.agent.send(self.client_order_message))
-            # print(f'\n\n-------------------\nclient_order_message {self.client_order_message}\n\n-------------------')
+
 
 
